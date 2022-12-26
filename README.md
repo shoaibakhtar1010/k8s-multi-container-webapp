@@ -174,3 +174,96 @@ running in different quantities
 on multiple different computers.
 
 
+by doing a kubectl get pods.
+That's going to list out the current status
+of our running pod right here.
+
+Now, on the right hand side,
+you'll notice that I'm reflecting three separate nodes.
+Remember, a node in the world of Kubernetes
+is a computer or essentially a physical computer
+or a virtual machine that is going to run
+some number of objects that we create inside of our cluster.
+You'll notice down here at the bottom center,
+I have something labeled called the "master".
+On the left hand side over here,
+we've got a deployment file
+that create a pod or a service.
+And then finally, up here on the top left hand side,
+I have the docker hub that lists a couple
+of the different images that we have created
+throughout this course.
+So let's walk through a series of actions now.
+We're gonna start off with our deployment file down here.
+Now, we're going to imagine that rather than creating
+a single instance of the multi-client image
+or multi-client container
+maybe we have a deployment file that instead
+says that it wants to create four copies
+using the multi-worker image.
+So we're just gonna imagine, 
+that we slightly change our deployment file.
+We're then going to imagine that we take this file
+and we feed it into the kubectl apply command.
+Remember, that is the command that we use
+to load up the  files
+that we had previously put together,
+the client pod and client node port.
+So when we run this command right here,
+the file is taken,
+and it is passed off to something called the master.
+Now, on the master,
+there is a variety of different programs,
+three or four in total that control
+your entire Kubernetes cluster.
+So there are four programs in total,
+but you and I are just going to kind of imagine
+for right now that there's just one program
+called the Kube API Server.
+Again, four programs.
+We're just gonna kinda consolidate it all down to one.
+The Kube API Server program is 100% responsible
+for monitoring the current status of all the different node
+inside of your cluster and making sure
+that they are essentially doing the correct thing.
+So we're going to imagine we take this deployment file
+and pass it into the master.
+Kube API Server is gonna see this new file,
+it's gonna read the configuration file,
+and it's going to interpret it in some fashion
+The master then has a little kind of notepad of sorts
+that records all of its responsibilities
+or essentially, all the things that you and I
+have told it to do in the form of these deployment files.
+So when we feed in the to deployment file,
+Kube API server is gonna look at that file
+and it's gonna see, 
+The developer wants us to run four copies of multi-worker.
+And so Kube API Server,
+it's going to update its little list
+of responsibilities and say,
+"Okay, I need to be running an image
+called multi-worker.
+I need to be running four copies of it.
+And right now, I am running zero copies."
+So Kube API Server is gonna update its little list
+of responsibilities right here, and it's gonna say,
+"Oh, boy, I need to be running four copies,
+and I'm currently running zero."
+Well, that's definitely bad news.
+So what's gonna happen?
+Kube API server is then going to reach out
+to the three different nodes that are running,
+and it's gonna say to each of these,
+We need to be running four copies of multi-worker,
+but right now, we are running zero.
+So you three nodes, I want you to start up
+some number of copies of multi-worker."
+It's gonna say to the first node down here,
+"I want you to start up two copies of multi-worker.
+I want you to start up one copy,
+and I want you to start up one copy as well."
+Now, inside of each of these nodes,
+there is a copy of docker running.
+That's right, a copy of docker running
+inside of each of these virtual machines.
